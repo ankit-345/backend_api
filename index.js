@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
@@ -11,6 +12,7 @@ const path = require("path");
 
 dotenv.config(); 
 app.use(express.json());
+app.use(cors());
 app.use("/images", express.static(path.join(__dirname,"/images")))
 
 mongoose.connect(process.env.MONGODB_URL, {
@@ -27,7 +29,7 @@ const storage = multer.diskStorage({
         cb(null, req.body.name);
     }
 })
-
+ 
 const upload = multer({storage: storage});
 app.post("/api/upload", upload.single("file"), (req, res)=>{
     res.status(200).json("File has been uploaded")
